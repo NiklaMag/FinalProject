@@ -1,0 +1,13 @@
+
+NeuralNet:
+-->treba inicijalizirat sve vektore nodeova i layera na velicinu koja treba za lakse handlanje
+-->38: uzasno napisano napravi da je input u neuralNet vektor i to ond prosljedi
+-->42: sumnjivo??????????
+->48 errpr
+
+Layer:
+-->treba inicijalizirat sve vektore nodeova i layera na velicinu koja treba za lakse handlanje
+
+Population:
+-->107-114: uzas
+
