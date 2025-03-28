@@ -2,9 +2,7 @@
 #include "Population.h"
 #include "Constants.h"
 //jos jedan nacin mutacije i jos jedan corssingover
-//uvijek mjenjamo funkciju nodea
-//mutacoja:random broj cvorova uzet i u odredemnom postotku se mjeja funkcoje a u svima tezina ali samo malo (gauss)
-//co drugacije biraj node
+
 
 int main() {
 
@@ -18,11 +16,19 @@ int main() {
 
     vector<int> amountOfNodesInEachLayer = {1,2,3,1};
 
+    int crossingOverIndex = 1;
+    int mutationIndex = 1;
+
+    //cout << "a"<<endl;
+    // cout << "choose crossingOver(1): " <<endl;
+    // cin >> crossingOverIndex;
+    //
+    //
+    // cout << "choose mutation(1):" << endl;
+    // cin >> mutationIndex;
+
      for (int i = 0; i < Constants::NUMBER_OF_GENERATIONS; i++) {
          int newPopulationFullness;//TU JOS VRTIT INPUTE
-
-         int input = 0;
-         //cout << "a"<<endl;
 
          cout << "generation: "<< i << "\n";
          if(i == 0){
@@ -63,7 +69,7 @@ int main() {
              //cout << "g"<<endl;
              //copy(population1.neuralNetList.begin(), population1.neuralNetList.end(), back_inserter(population2.neuralNetList));
                 //sketchy^^^^^
-             newPopulationFullness = population1.crossingOverAndMutation(population2, newPopulationFullness);//tu je neki zez
+             newPopulationFullness = population1.crossingOverAndMutation(population2, newPopulationFullness, crossingOverIndex, mutationIndex);//tu je neki zez
              newPopulationFullness++;
              //cout << "h"<<endl;
          }

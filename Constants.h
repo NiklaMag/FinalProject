@@ -8,10 +8,10 @@
 namespace Constants {
     static const int AMOUNT_OF_WEIGHTS = 3;//????????????
     static const int AMOUNT_OF_LAYERS = 4;
-    static const int POPULATION_SIZE = 50;
+    static const int POPULATION_SIZE = 5;
     static const float BETTER_PARENT_ADVANTAGE = 0.6f;
     static const float MUTATION_PROBABILITY = 0.6f;
-    static const int NUMBER_OF_GENERATIONS = 100;
+    static const int NUMBER_OF_GENERATIONS = 10;
 }
 
 

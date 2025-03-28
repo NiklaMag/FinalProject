@@ -11,8 +11,6 @@ class NeuralNet {
 public:
     vector<int> amountOfNodesInEachLayer;
     vector<Layer> layers;
-    //vector<float> layerInputs;
-    //vector<float> layerOutputs;
     vector<float> inputs;
     vector<float> outputs;
     float fitness;

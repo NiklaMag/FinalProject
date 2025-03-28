@@ -14,6 +14,8 @@ public:
     vector<NeuralNet> neuralNetList;
     NeuralNet parent1;
     NeuralNet parent2;
+    NeuralNet child1;
+    NeuralNet child2;
 
     Population();
     ~Population();
@@ -22,7 +24,12 @@ public:
     NeuralNet& getBestNeuralNet();
     void chooseParents();
     void entityFitnessEval();
-    int crossingOverAndMutation(Population &NewPop, int index);
+    int crossingOverAndMutation(Population &NewPop, int index, int crossingOverIndex, int mutationIndex);
+    void crossingOver1();
+    void mutation1(int index);
+    void crossingOver2();
+    void mutation2(int index);
+
 
 };
 
