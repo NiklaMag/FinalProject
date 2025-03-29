@@ -32,6 +32,12 @@ NeuralNet &Population::getBestNeuralNet() {
     return neuralNetList[0];
 }
 
+float gaussFunction(float x) {
+    //f(x) = exp(-x^2);
+    return exp(pow(-x, 2));
+    //mozda je ovjde: exp(-pow(x, 2)); ????????
+}
+
 
 void Population::chooseParents() {
     float r = randomFloat(0,1);
@@ -90,6 +96,7 @@ void Population::crossingOver1() {
             }
         }
     }
+    //cout << "co1"<<endl;
 }
 
 
@@ -97,6 +104,43 @@ void Population::crossingOver1() {
 void Population::crossingOver2() {
     //novi crossing over
     //co drugacije biraj node
+    this->child1 = NeuralNet();
+    this->child1.layers.reserve(Constants::AMOUNT_OF_LAYERS);
+    this->child1.layers.resize(Constants::AMOUNT_OF_LAYERS);
+    this->child1.amountOfNodesInEachLayer = this->parent1.amountOfNodesInEachLayer;
+
+    this->child2 = NeuralNet();
+    this->child2.layers.reserve(Constants::AMOUNT_OF_LAYERS);
+    this->child2.layers.resize(Constants::AMOUNT_OF_LAYERS);
+    this->child2.amountOfNodesInEachLayer = this->parent2.amountOfNodesInEachLayer;
+
+
+    for(int i = 0; i <Constants::AMOUNT_OF_LAYERS; i++) {
+        if(i == 0) {
+            this->child1.layers[i] = this->parent1.layers[i];
+            this->child2.layers[i] = this->parent2.layers[i];
+        }else{
+            int amountOfNodesInLayer = parent1.amountOfNodesInEachLayer[i];
+            this->child1.layers[i].nodes.reserve(amountOfNodesInLayer);
+            this->child1.layers[i].nodes.resize(amountOfNodesInLayer);
+            this->child2.layers[i].nodes.reserve(amountOfNodesInLayer);
+            this->child2.layers[i].nodes.resize(amountOfNodesInLayer);
+
+            //ovo je novi dio:
+            //gledano svaki node i 50/50 sanse kojeg roditelja biramo
+            for(int j = 0; j < amountOfNodesInLayer; j++) {
+                float r = randomFloat(0,1);
+                if(r <= 0.5) {
+                    this->child1.layers[i].nodes[j] = this->parent1.layers[i].nodes[j];
+                    this->child2.layers[i].nodes[j] = this->parent2.layers[i].nodes[j];
+                }else{
+                    this->child1.layers[i].nodes[j] = this->parent2.layers[i].nodes[j];
+                    this->child2.layers[i].nodes[j] = this->parent1.layers[i].nodes[j];
+                }
+            }
+        }
+    }
+    //cout << "co2"<<endl;
 }
 
 void Population::mutation1(int index) {
@@ -131,6 +175,51 @@ void Population::mutation2(int index) {
     //uvijek mjenjamo funkciju nodea
     //mutacija:random broj cvorova uzet i u odredemnom postotku se mjeja funkcoje a u svima tezina ali samo malo (gauss)
 
+    float r1 = randomFloat(0,1);
+    int amountOfNodesInNet  = 0;
+
+    for(int amountOfNodesInLayer: this->child1.amountOfNodesInEachLayer) {
+        amountOfNodesInNet = amountOfNodesInNet + amountOfNodesInLayer;
+        //cout << amountOfNodesInNet << endl;
+    }
+
+    if(r1 < Constants::MUTATION_PROBABILITY) {
+        int amountOfNodesMutating = amountOfNodesInNet * Constants::PERCENTAGE_OF_NODES_MUTATING;
+        for(int i = 0; i < amountOfNodesMutating; i++) {//bilo bi dobro da se nekako prati koji nodeovi su vec mutirani koji ne i da se samo njih mutira(oni koji nisu), mozda neki flag mutated i ond stavimo na true kd se izmutira i ond preskocimo ako je taj node mutiran vec
+
+            int randomLayerIndex1 = randomInt(1, this->child1.layers.size() - 1);
+            int amountOfWeights1 = this->child1.amountOfNodesInEachLayer[randomLayerIndex1-1];
+            int randomNodeIndex1 = randomInt(0, this->child1.layers[randomLayerIndex1].nodes.size()-1);
+
+            int randomLayerIndex2 = randomInt(1, this->child2.layers.size() - 1);
+            int amountOfWeights2 = this->child2.amountOfNodesInEachLayer[randomLayerIndex2-1];
+            int randomNodeIndex2 = randomInt(0, this->child2.layers[randomLayerIndex2].nodes.size()-1);
+
+
+            //nekim od nodeova promjenit funkciju, svima weight promjenit po gausu
+            //tu promjenit tezine
+            for(int j = 0; j < amountOfWeights1; j++) {
+                this->child1.layers[randomLayerIndex1].nodes[randomNodeIndex1].weights[j] = gaussFunction(this->child1.layers[randomLayerIndex1].nodes[randomNodeIndex1].weights[j]);
+            }
+            for(int j = 0; j < amountOfWeights2; j++) {
+                this->child2.layers[randomLayerIndex2].nodes[randomNodeIndex2].weights[j] = gaussFunction(this->child2.layers[randomLayerIndex2].nodes[randomNodeIndex2].weights[j]);
+            }
+            //nekim nodeovima promjenit funk
+
+            //imamo random node i promjenili smo weight i sad jos imamo neku sansu da ce se i funkcija promjeniti
+            float r2 = randomFloat(0,1);
+            float r3 = randomFloat(0,1);
+
+            if(r2 < Constants::CHANCE_OF_NODE_CHANGING_FUNCTIONS) {
+                this->child1.layers[randomLayerIndex1].nodes[randomNodeIndex1].function = static_cast<Function>(randomInt(0,6));
+            }
+            if(r3 < Constants::CHANCE_OF_NODE_CHANGING_FUNCTIONS) {
+                this->child2.layers[randomLayerIndex2].nodes[randomNodeIndex2].function = static_cast<Function>(randomInt(0,6));
+            }
+        }
+    }else {
+        //not mutating
+    }
 }
 
 
@@ -144,6 +233,7 @@ int Population::crossingOverAndMutation(Population &NewPop, int index, int cross
     //CROSSING_OVER==============================
     if(crossingOverIndex == 1) {
         crossingOver1();
+
     }else if(crossingOverIndex == 2) {
         crossingOver2();
     }
@@ -158,7 +248,7 @@ int Population::crossingOverAndMutation(Population &NewPop, int index, int cross
     index++;
 
     if(index != Constants::POPULATION_SIZE) {
-        NewPop.neuralNetList[index] = child2;
+        NewPop.neuralNetList[index] = this->child2;
     }
 
     return index;

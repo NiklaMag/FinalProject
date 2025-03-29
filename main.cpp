@@ -7,17 +7,18 @@
 int main() {
 
     Population population1 = Population();
-    //unsigned int seed = static_cast<unsigned int>(time(NULL));
-    //srand(1742771394);
-    //cout << "seed  " << seed <<endl;
-    srand(time(NULL));  //1742771394  1742771419 1742771447
+    unsigned int seed = static_cast<unsigned int>(time(NULL));
+    srand(seed);
+    cout << "seed  " << seed <<endl;
+    //srand(time(NULL));  //1742771394  1742771419 1742771447
 
     vector<float> inputs = {1,2,3,4,5,6,7,8,9};
 
     vector<int> amountOfNodesInEachLayer = {1,2,3,1};
 
-    int crossingOverIndex = 1;
-    int mutationIndex = 1;
+    int crossingOverIndex = 1;//2. radi isto
+
+    int mutationIndex = 2;
 
     //cout << "a"<<endl;
     // cout << "choose crossingOver(1): " <<endl;

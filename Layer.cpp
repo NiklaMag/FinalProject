@@ -50,7 +50,13 @@ vector<float> Layer::inputsIntoNodes(vector<float> inputs, int layerIndex) {//er
                     sum = sin(sum);
                 break;
                 case Function::SQRT:
-                    sum = sqrt(sum);
+                    if(sum < 0) {
+                        sum = sum *(-1);
+                        sum = sqrt(sum);
+                        sum = sum *(-1);
+                    }else {
+                        sum = sqrt(sum);
+                    }
                 break;
                 case Function::TANH:
                     sum = tanh(sum);

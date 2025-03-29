@@ -51,14 +51,8 @@ vector<float> NeuralNet::inputsIntoLayers(vector<float> inputs) {
     //cout <<"inputsIntoLayers this->layers.size():" <<this->layers.size() << endl;
 
     for(int i = 0; i < this->layers.size(); i++) {
-        //cout << "in2" << endl;
-        //cout << "inputsIntoLayers i: " << i <<endl;
-
         inputs = layers[i].inputsIntoNodes(inputs, i);
-        //cout << "in3" << endl;
     }
-
-
 return inputs;
 }
 
