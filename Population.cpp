@@ -62,18 +62,19 @@ void Population::chooseParents() {
 
 void Population::crossingOver1() {
 
+    int amountOflayers = this->parent1.amountOfNodesInEachLayer.size();
     this->child1 = NeuralNet();
-    this->child1.layers.reserve(Constants::AMOUNT_OF_LAYERS);
-    this->child1.layers.resize(Constants::AMOUNT_OF_LAYERS);
+    this->child1.layers.reserve(amountOflayers);
+    this->child1.layers.resize(amountOflayers);
     this->child1.amountOfNodesInEachLayer = this->parent1.amountOfNodesInEachLayer;
 
     this->child2 = NeuralNet();
-    this->child2.layers.reserve(Constants::AMOUNT_OF_LAYERS);
-    this->child2.layers.resize(Constants::AMOUNT_OF_LAYERS);
+    this->child2.layers.reserve(amountOflayers);
+    this->child2.layers.resize(amountOflayers);
     this->child2.amountOfNodesInEachLayer = this->parent2.amountOfNodesInEachLayer;
 
 
-    for(int i = 0; i <Constants::AMOUNT_OF_LAYERS; i++) {
+    for(int i = 0; i <amountOflayers; i++) {
         if(i == 0) {
             this->child1.layers[i] = this->parent1.layers[i];
             this->child2.layers[i] = this->parent2.layers[i];
@@ -104,18 +105,19 @@ void Population::crossingOver1() {
 void Population::crossingOver2() {
     //novi crossing over
     //co drugacije biraj node
+    int amountOflayers = this->parent1.amountOfNodesInEachLayer.size();
     this->child1 = NeuralNet();
-    this->child1.layers.reserve(Constants::AMOUNT_OF_LAYERS);
-    this->child1.layers.resize(Constants::AMOUNT_OF_LAYERS);
+    this->child1.layers.reserve(amountOflayers);
+    this->child1.layers.resize(amountOflayers);
     this->child1.amountOfNodesInEachLayer = this->parent1.amountOfNodesInEachLayer;
 
     this->child2 = NeuralNet();
-    this->child2.layers.reserve(Constants::AMOUNT_OF_LAYERS);
-    this->child2.layers.resize(Constants::AMOUNT_OF_LAYERS);
+    this->child2.layers.reserve(amountOflayers);
+    this->child2.layers.resize(amountOflayers);
     this->child2.amountOfNodesInEachLayer = this->parent2.amountOfNodesInEachLayer;
 
 
-    for(int i = 0; i <Constants::AMOUNT_OF_LAYERS; i++) {
+    for(int i = 0; i <amountOflayers; i++) {
         if(i == 0) {
             this->child1.layers[i] = this->parent1.layers[i];
             this->child2.layers[i] = this->parent2.layers[i];

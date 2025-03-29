@@ -17,7 +17,8 @@ NeuralNet::NeuralNet(vector<int> amountOfNodesInEachLayer, vector<float> inputs)
     //creating a neural net, no inputs
     //tu treba reserve and resize napravit za this->layers
     this->amountOfNodesInEachLayer = amountOfNodesInEachLayer;
-    for(int i = 0; i < Constants::AMOUNT_OF_LAYERS; i++) {//ide od 1 - 3
+    int amountOflayers = this->amountOfNodesInEachLayer.size();
+    for(int i = 0; i < amountOflayers; i++) {//ide od 1 - 3
         int amountOfNodesInLayer = amountOfNodesInEachLayer[i];
         Layer layer = Layer();
         this->layers.push_back(layer);
