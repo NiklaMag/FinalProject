@@ -12,21 +12,34 @@ int main() {
     cout << "seed  " << seed <<endl;
     //srand(time(NULL));  //1742771394  1742771419 1742771447
 
-    vector<float> inputs = {1,2,3,4,5,6,7,8,9};
+    // vector<float> inputs = {1,2,3,4,5,6,7,8,9};
+    vector<vector<float>> inputs = {
+        {1,1},
+        {2,2},
+        {3,3},
+        {4,4},
+        {5,5},
+        {6,6},
+        {7,7},
+        {8,8},
+        {9,9},
+        {0,0}
+    };
 
-    vector<int> amountOfNodesInEachLayer = {1,2,3,1};
+    vector<int> amountOfNodesInEachLayer = {2,2,3,1};
 
-    int crossingOverIndex = 1;//2. radi isto
+    int crossingOverIndex;//2. radi isto
 
-    int mutationIndex = 2;
+    int mutationIndex;
 
+    //1
     //cout << "a"<<endl;
-    // cout << "choose crossingOver(1): " <<endl;
-    // cin >> crossingOverIndex;
-    //
-    //
-    // cout << "choose mutation(1):" << endl;
-    // cin >> mutationIndex;
+     cout << "choose crossingOver(1,2): " <<endl;
+     cin >> crossingOverIndex;
+
+
+     cout << "choose mutation(1,2):" << endl;
+     cin >> mutationIndex;
 
      for (int i = 0; i < Constants::NUMBER_OF_GENERATIONS; i++) {
          int newPopulationFullness;//TU JOS VRTIT INPUTE
@@ -37,7 +50,7 @@ int main() {
              //filling and evaluating initial population ==============================
              for (int j = 0; j < Constants::POPULATION_SIZE; j++) {
                  //cout << "b"<<endl;
-                 NeuralNet neuralNet(amountOfNodesInEachLayer, inputs);//not the best
+                 NeuralNet neuralNet(amountOfNodesInEachLayer);//not the best
                  //neuralNet.inputs = inputs;
                  neuralNet.amountOfNodesInEachLayer = amountOfNodesInEachLayer;
                  population1.neuralNetList[j] = neuralNet;
@@ -50,9 +63,9 @@ int main() {
          for (int j = 0; j < Constants::POPULATION_SIZE; j++) {
              //cout << "c"<<endl;
              //RACUNANJE FITNESA ZA SVAKI ELEMENT U POPULACIJI
-             population1.neuralNetList[j].inputs = inputs;
+             // population1.neuralNetList[j].inputs = inputs;
              //cout << "c"<<endl;
-             population1.neuralNetList[j].fitness = population1.neuralNetList[j].getFitness();//nsto oko fitness kalkulacije jebe %%%%%%
+             population1.neuralNetList[j].fitness = population1.neuralNetList[j].getFitness(inputs);//nsto oko fitness kalkulacije jebe %%%%%%
              //cout << "c2"<<endl;
              //fitness se razjebe na drugoj generaciji
          }

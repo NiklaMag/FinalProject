@@ -11,17 +11,17 @@ class NeuralNet {
 public:
     vector<int> amountOfNodesInEachLayer;
     vector<Layer> layers;
-    vector<float> inputs;
-    vector<float> outputs;
+    // vector<float> inputs;
+    // vector<float> outputs;
     float fitness;
     NeuralNet();
     ~NeuralNet();
-    NeuralNet( vector<int> amountOfNodesInEachLayer, vector<float> inputs);
+    NeuralNet( vector<int> amountOfNodesInEachLayer);
 
 
     vector<float> inputsIntoLayers(vector<float> inputs);
-    float getFitness();
-    float functionForRegression(float input);
+    float getFitness(vector<vector<float>> inputs);
+    float functionForRegression(vector<float> inputs);
     void runInputs(vector<float> inputs);
 };
 

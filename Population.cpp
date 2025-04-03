@@ -24,7 +24,7 @@ void Population::neuralNetFitnessSort() {
     sort(neuralNetList.begin(), neuralNetList.end(),
               [](NeuralNet& n1, NeuralNet& n2)
               {
-                  return n1.getFitness() < n2.getFitness();
+                  return n1.fitness < n2.fitness;
               });
 }
 
