@@ -4,21 +4,17 @@
 //implementiraj get fitness
 
 #include "NeuralNet.h"
-
 #include <iostream>
-#include <ostream>
 #include <vector>
-#include "Constants.h"
 #include "Layer.h"
 #include "Node.h"
 using namespace std;
 
-NeuralNet::NeuralNet(vector<int> amountOfNodesInEachLayer) {//dodat jos input i onda to prosljedit prvom nodeu i to ubacit u value&&
+NeuralNet::NeuralNet(vector<int> amountOfNodesInEachLayer) {
     //creating a neural net, no inputs
-    //tu treba reserve and resize napravit za this->layers
     this->amountOfNodesInEachLayer = amountOfNodesInEachLayer;
     int amountOflayers = this->amountOfNodesInEachLayer.size();
-    for(int i = 0; i < amountOflayers; i++) {//ide od 1 - 3
+    for(int i = 0; i < amountOflayers; i++) {
         int amountOfNodesInLayer = amountOfNodesInEachLayer[i];
         Layer layer = Layer();
         this->layers.push_back(layer);
@@ -27,7 +23,6 @@ NeuralNet::NeuralNet(vector<int> amountOfNodesInEachLayer) {//dodat jos input i 
             //postavljanje prvog layera
             for(int j = 0; j < amountOfNodesInLayer; j++ ) {
                 Node node = Node(); //gereriranje nodea sa random tezinama 0-1 &&ovdje
-                // node.value = inputs[0];//eh.....ovdje da ima vise inputova bi tu islo od j
                 this->layers[i].nodes.push_back(node);
             }
         }else if(i > 0) {
@@ -42,15 +37,14 @@ NeuralNet::NeuralNet(vector<int> amountOfNodesInEachLayer) {//dodat jos input i 
 
 
 NeuralNet::NeuralNet() {
-
+    this->layers = {}
+;
 }
 NeuralNet::~NeuralNet() {
 
 }
 
 vector<float> NeuralNet::inputsIntoLayers(vector<float> inputs) {
-    //cout <<"inputsIntoLayers this->layers.size():" <<this->layers.size() << endl;
-
     for(int i = 0; i < this->layers.size(); i++) {
         inputs = layers[i].inputsIntoNodes(inputs, i);
     }
@@ -58,10 +52,7 @@ return inputs;
 }
 
 float NeuralNet::functionForRegression(vector<float> inputs) {
-    //f(x) = (e^-x )sin(2x) + (x^2)/4 + cos(3x) + ln(1+x^2)
-    // float firstPart = exp(-input) * sin(2*input);
-    // float secondPart = pow(input, 2)/4;
-    // float thirdpart = cos(3*input) + log(1 + pow(input,2));
+
     float sum = 0;
     for(int i = 0; i < inputs.size(); i++) {
         sum = sum + (sin(inputs[i]) + cos(2*inputs[i]) + log(1 + pow(inputs[i], 2)));
@@ -74,16 +65,13 @@ float NeuralNet::functionForRegression(vector<float> inputs) {
 
 float NeuralNet::getFitness(vector<vector<float>> inputs) {
 
-    // float fitness;
-    //cout << "c1"<<endl;
     vector<float> expectedOutputs = {};
     vector<float> realOutputs = {};
     expectedOutputs.resize(inputs.size());
     realOutputs.resize(inputs.size());
-    // vector<float> in;
 
     for(int i = 0; i < inputs.size(); i++) {//ovo vrti korz sve input "skupove"
-
+        // cout << "get fitness(inputs): " << i << endl;
         expectedOutputs[i] = functionForRegression(inputs[i]);
         inputs[i] = inputsIntoLayers(inputs[i]);
         realOutputs[i] = inputs[i][0];
@@ -91,60 +79,11 @@ float NeuralNet::getFitness(vector<vector<float>> inputs) {
 
     float sum = 0;
 
-    for(int j = 0; j <realOutputs.size(); j++) {//ovdje greska prvo se moraju izvrtit svi inputi pa tek onda ova greska racunat
-        //cout << "c9"<<endl;
+    for(int j = 0; j <realOutputs.size(); j++) {
         sum = sum + pow(expectedOutputs[j] - realOutputs[j], 2);
-        //cout << "c10"<<endl;
     }
     float fitness = sqrt((1.0f / static_cast<float>(realOutputs.size())) * sum);
-
-    // expectedOutputs.resize(inputs[0].size());
-    //
-    // this->outputs.reserve(this->inputs.size());
-    // this->outputs.resize(this->inputs.size());
-    //cout << "c2"<<endl;
-    // for(int i = 0; i < this->inputs.size(); i++) {
-    //    // cout << "c3"<<endl;
-    //     // expectedOutputs[i] = functionForRegression(this->inputs[i]);
-    //     //cout << "c4"<<endl;
-    //     // in = {this->inputs[i]};
-    //
-    //     //cout << "c5 "<<this->inputs[i]<<endl; //pukne kd je this->inputs[i] == 1
-    //     //this->inputs = in;//kad unosimo inpute treba ih bit kolko ima nodeova u prvom layeru
-    //     in = inputsIntoLayers(in);
-    //     //cout << "c6"<<endl;
-    //     this->outputs[i] =  in[0];//this->outputs shoudl be a vector of vectors so if we have more outputs its handles########
-    //     //cout << "c7"<<endl;
-    //     //fine all before this
-    // }//this gives expectedResults and gotten results
-    // float sum = 0;
-    // //cout << "c8"<<endl;
-    // for(int i = 0; i <this->outputs.size(); i++) {//ovdje greska prvo se moraju izvrtit svi inputi pa tek onda ova greska racunat
-    //     //cout << "c9"<<endl;
-    //     sum = sum + pow(expectedOutputs[i] - this->outputs[i], 2);
-    //     //cout << "c10"<<endl;
-    // }
-    //cout << "c11"<<endl;
-    //error function:
-    //sqrt( (1/numberOfInputs) * sum((expectedRes - gottenRes)^2) )
-    // float fitness = sqrt((1/outputs.size())*sum);//ovjde ne valja, ZASTO, sve do tud je ok
-    // float fitness = sqrt((1.0f / static_cast<float>(outputs.size())) * sum);
-    //cout << "c12"<<endl;
 
 return fitness;
 }
 
-
-// void NeuralNet::runInputs(vector<float> inputs) {
-//     //za svaki input vrati odgovarajuci output mreze
-//     vector<float> in;
-//
-//     for(int i = 0; i < inputs.size(); i++) {
-//         in = {inputs[i]};
-//         this->inputs = in;
-//         in = inputsIntoLayers(in);
-//         this->outputs.push_back(in[0]);
-//         //vrati vektor outputa, prvi element nakon zadnje iteracije je output mreze
-//     }
-//
-// }

@@ -14,8 +14,8 @@ class Layer {
 public:
 
     vector<Node> nodes;
-    vector<float> nodeInputs;
-    vector<float> nodeOutputs;
+    // vector<float> nodeInputs;
+    // vector<float> nodeOutputs;
 
     Layer();
     ~Layer();

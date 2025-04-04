@@ -8,11 +8,10 @@
 #include <cmath>
 #include <iostream>
 
-#include "NeuralNet.h"
 using namespace std;
 
 Layer::Layer() {
-
+    this->nodes = {};
 }
 Layer::~Layer() {
 }

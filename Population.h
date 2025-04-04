@@ -24,7 +24,7 @@ public:
     NeuralNet& getBestNeuralNet();
     void chooseParents();
     void entityFitnessEval();
-    int crossingOverAndMutation(Population &NewPop, int index, int crossingOverIndex, int mutationIndex);
+    int crossingOverAndMutation(Population &NewPop, int index, int crossingOverIndex, int mutationIndex, int randomCrossingOversMutations);
     void crossingOver1();
     void mutation1(int index);
     void crossingOver2();

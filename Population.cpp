@@ -12,7 +12,7 @@
 using namespace std;
 
 Population::Population() {
-    neuralNetList.reserve(Constants::POPULATION_SIZE);
+    this->neuralNetList = {};
     neuralNetList.resize(Constants::POPULATION_SIZE);
 }
 
@@ -33,9 +33,9 @@ NeuralNet &Population::getBestNeuralNet() {
 }
 
 float gaussFunction(float x) {
-    //f(x) = exp(-x^2);
-    return exp(pow(-x, 2));
-    //mozda je ovjde: exp(-pow(x, 2)); ????????
+    float part1 = -pow(x-Constants::NORMAL_DISTRIBUTION_MEAN,2)/(2* pow(Constants::NORMAL_DISTRIBUTION_STDDEV,2));
+    float part2 = exp(part1)/(Constants::NORMAL_DISTRIBUTION_STDDEV*sqrt(2*M_PI));
+return part2;
 }
 
 
@@ -64,12 +64,12 @@ void Population::crossingOver1() {
 
     int amountOflayers = this->parent1.amountOfNodesInEachLayer.size();
     this->child1 = NeuralNet();
-    this->child1.layers.reserve(amountOflayers);
+    // this->child1.layers.reserve(amountOflayers);
     this->child1.layers.resize(amountOflayers);
     this->child1.amountOfNodesInEachLayer = this->parent1.amountOfNodesInEachLayer;
 
     this->child2 = NeuralNet();
-    this->child2.layers.reserve(amountOflayers);
+    // this->child2.layers.reserve(amountOflayers);
     this->child2.layers.resize(amountOflayers);
     this->child2.amountOfNodesInEachLayer = this->parent2.amountOfNodesInEachLayer;
 
@@ -80,9 +80,9 @@ void Population::crossingOver1() {
             this->child2.layers[i] = this->parent2.layers[i];
         }else{
             int amountOfNodesInLayer = parent1.amountOfNodesInEachLayer[i];
-            this->child1.layers[i].nodes.reserve(amountOfNodesInLayer);
+            // this->child1.layers[i].nodes.reserve(amountOfNodesInLayer);
             this->child1.layers[i].nodes.resize(amountOfNodesInLayer);
-            this->child2.layers[i].nodes.reserve(amountOfNodesInLayer);
+            // this->child2.layers[i].nodes.reserve(amountOfNodesInLayer);
             this->child2.layers[i].nodes.resize(amountOfNodesInLayer);
 
 
@@ -97,7 +97,6 @@ void Population::crossingOver1() {
             }
         }
     }
-    //cout << "co1"<<endl;
 }
 
 
@@ -107,12 +106,12 @@ void Population::crossingOver2() {
     //co drugacije biraj node
     int amountOflayers = this->parent1.amountOfNodesInEachLayer.size();
     this->child1 = NeuralNet();
-    this->child1.layers.reserve(amountOflayers);
+    // this->child1.layers.reserve(amountOflayers);
     this->child1.layers.resize(amountOflayers);
     this->child1.amountOfNodesInEachLayer = this->parent1.amountOfNodesInEachLayer;
 
     this->child2 = NeuralNet();
-    this->child2.layers.reserve(amountOflayers);
+    // this->child2.layers.reserve(amountOflayers);
     this->child2.layers.resize(amountOflayers);
     this->child2.amountOfNodesInEachLayer = this->parent2.amountOfNodesInEachLayer;
 
@@ -123,9 +122,9 @@ void Population::crossingOver2() {
             this->child2.layers[i] = this->parent2.layers[i];
         }else{
             int amountOfNodesInLayer = parent1.amountOfNodesInEachLayer[i];
-            this->child1.layers[i].nodes.reserve(amountOfNodesInLayer);
+            // this->child1.layers[i].nodes.reserve(amountOfNodesInLayer);
             this->child1.layers[i].nodes.resize(amountOfNodesInLayer);
-            this->child2.layers[i].nodes.reserve(amountOfNodesInLayer);
+            // this->child2.layers[i].nodes.reserve(amountOfNodesInLayer);
             this->child2.layers[i].nodes.resize(amountOfNodesInLayer);
 
             //ovo je novi dio:
@@ -142,7 +141,6 @@ void Population::crossingOver2() {
             }
         }
     }
-    //cout << "co2"<<endl;
 }
 
 void Population::mutation1(int index) {
@@ -152,7 +150,6 @@ void Population::mutation1(int index) {
     if(r < Constants::MUTATION_PROBABILITY) {
 
         //dva random indexa: index layera i index nodea u tom layeru i onda po tome dohvatit i mutirat
-        //sad ovo radi kako treba
         int randomLayerIndex = randomInt(1, child1.layers.size() - 1);
         int amountOfWeights = this->neuralNetList[index].amountOfNodesInEachLayer[randomLayerIndex-1];
         int randomNodeIndex = randomInt(0, child1.layers[randomLayerIndex].nodes.size()-1);
@@ -164,7 +161,7 @@ void Population::mutation1(int index) {
         randomNodeIndex = randomInt(0, child2.layers[randomLayerIndex].nodes.size()-1);
 
         child2.layers[randomLayerIndex].nodes[randomNodeIndex] = Node(amountOfWeights);
-        //DRUGI NACIN
+
 
     }else{
         //not mutating
@@ -182,7 +179,6 @@ void Population::mutation2(int index) {
 
     for(int amountOfNodesInLayer: this->child1.amountOfNodesInEachLayer) {
         amountOfNodesInNet = amountOfNodesInNet + amountOfNodesInLayer;
-        //cout << amountOfNodesInNet << endl;
     }
 
     if(r1 < Constants::MUTATION_PROBABILITY) {
@@ -213,10 +209,10 @@ void Population::mutation2(int index) {
             float r3 = randomFloat(0,1);
 
             if(r2 < Constants::CHANCE_OF_NODE_CHANGING_FUNCTIONS) {
-                this->child1.layers[randomLayerIndex1].nodes[randomNodeIndex1].function = static_cast<Function>(randomInt(0,6));
+                this->child1.layers[randomLayerIndex1].nodes[randomNodeIndex1].function = static_cast<Function>(randomInt(0,Constants::AMOUNT_OF_FUNCTIONS));
             }
             if(r3 < Constants::CHANCE_OF_NODE_CHANGING_FUNCTIONS) {
-                this->child2.layers[randomLayerIndex2].nodes[randomNodeIndex2].function = static_cast<Function>(randomInt(0,6));
+                this->child2.layers[randomLayerIndex2].nodes[randomNodeIndex2].function = static_cast<Function>(randomInt(0,Constants::AMOUNT_OF_FUNCTIONS));
             }
         }
     }else {
@@ -226,25 +222,46 @@ void Population::mutation2(int index) {
 
 
 
-int Population::crossingOverAndMutation(Population &NewPop, int index, int crossingOverIndex, int mutationIndex) {
+int Population::crossingOverAndMutation(Population &NewPop, int index, int crossingOverIndex, int mutationIndex, int randomCrossingOversMutations) {
 
+    int coIndex;
+    int mutIndex;
     if(index == 0){
         NewPop.neuralNetList[0] = this->getBestNeuralNet();//dodamo najbolju jedinku u novu populaciju
         return index;
     }
     //CROSSING_OVER==============================
-    if(crossingOverIndex == 1) {
+
+
+    if(randomCrossingOversMutations == 0) {
+        coIndex = crossingOverIndex;
+        mutIndex = mutationIndex;
+    }else if(randomCrossingOversMutations == 1) {
+
+        coIndex = randomInt(1,2);
+        mutIndex = randomInt(1,2);
+
+        // cout << "coIndex: " << coIndex <<endl;
+        // cout << "mutIndex: " << mutIndex <<endl;
+    }
+
+    if(coIndex == 1) {
         crossingOver1();
 
-    }else if(crossingOverIndex == 2) {
+    }else if(coIndex == 2) {
         crossingOver2();
     }
     //MUTATION=====================================
-    if(mutationIndex == 1) {
+    if(mutIndex == 1) {
         mutation1(index);
-    }else if(mutationIndex == 2) {
+
+    }else if(mutIndex == 2) {
         mutation2(index);
     }
+
+
+
+
 
     NewPop.neuralNetList[index] = this->child1;
     index++;
@@ -256,124 +273,3 @@ int Population::crossingOverAndMutation(Population &NewPop, int index, int cross
     return index;
 }
 
-
-
-
-
-
-
-
-// int Population::crossingOverAndMutation(Population &NewPop, int index) {
-//
-//     if(index == 0){
-//         NewPop.neuralNetList[0] = this->getBestNeuralNet();//dodamo najbolju jedinku u novu populaciju
-//         return index;
-//     }
-//
-//     //CROSSING_OVER==============================
-//     NeuralNet child1 = NeuralNet();
-//     child1.layers.reserve(Constants::AMOUNT_OF_LAYERS);
-//     child1.layers.resize(Constants::AMOUNT_OF_LAYERS);
-//     child1.amountOfNodesInEachLayer = parent1.amountOfNodesInEachLayer;
-//
-//     NeuralNet child2= NeuralNet();
-//     child2.layers.reserve(Constants::AMOUNT_OF_LAYERS);
-//     child2.layers.resize(Constants::AMOUNT_OF_LAYERS);
-//     child2.amountOfNodesInEachLayer = parent2.amountOfNodesInEachLayer;
-//
-//
-//     for(int i = 0; i <Constants::AMOUNT_OF_LAYERS; i++) {
-//         if(i == 0) {
-//             child1.layers[i] = parent1.layers[i];
-//             child2.layers[i] = parent2.layers[i];
-//         }else{
-//             int amountOfNodesInLayer = parent1.amountOfNodesInEachLayer[i];
-//             child1.layers[i].nodes.reserve(amountOfNodesInLayer);
-//             child1.layers[i].nodes.resize(amountOfNodesInLayer);
-//             child2.layers[i].nodes.reserve(amountOfNodesInLayer);
-//             child2.layers[i].nodes.resize(amountOfNodesInLayer);
-//
-//
-//             for(int j = 0; j < amountOfNodesInLayer; j++) {
-//
-//                 if(j < amountOfNodesInLayer/2) {
-//
-//                     child1.layers[i].nodes[j] = parent1.layers[i].nodes[j];
-//                     child2.layers[i].nodes[j] = parent2.layers[i].nodes[j];
-//                 }else {
-//                     child1.layers[i].nodes[j] = parent2.layers[i].nodes[j];
-//                     child2.layers[i].nodes[j] = parent1.layers[i].nodes[j];
-//                 }
-//             }
-//         }
-//     }
-//
-//
-//     //MUTATION=====================================
-//     float r = randomFloat(0,1);
-//
-//     if(r < Constants::MUTATION_PROBABILITY) {
-//
-//         // int totalNumberOfNodes = 0;
-//         // for(int i = 0; i <Constants::AMOUNT_OF_LAYERS; i++) {
-//         //     int amountOfNodesInLayer = parent1.amountOfNodesInEachLayer[i];
-//         //     for(int j = 0; j < amountOfNodesInLayer; j++) {
-//         //         totalNumberOfNodes++;
-//         //     }
-//         // }
-//         //
-//         // //============================================================================
-//         // int currentNodeIndex = 0;
-//         // int mutatingNodeIndex1 = randomInt(0, totalNumberOfNodes);
-//         // int mutatingNodeIndex2 = randomInt(0, totalNumberOfNodes);
-//         //
-//         // for(int i = 0; i <Constants::AMOUNT_OF_LAYERS; i++) {
-//         //     int amountOfNodesInLayer = child1.layers[i].nodes.size();
-//         //     int amountOfWeights = this->neuralNetList[index].amountOfNodesInEachLayer[i-1];
-//         //
-//         //     for(int j = 0; j < amountOfNodesInLayer; j++) {
-//         //         if(currentNodeIndex == mutatingNodeIndex1) {
-//         //
-//         //             float value = child1.layers[i].nodes[j].value;
-//         //             child1.layers[i].nodes[j] = Node(amountOfWeights);
-//         //             child1.layers[i].nodes[j].value = value;
-//         //         }
-//         //         if(currentNodeIndex == mutatingNodeIndex2) {
-//         //             //mutate this node
-//         //             float value = child2.layers[i].nodes[j].value;
-//         //             child2.layers[i].nodes[j] = Node(amountOfWeights);
-//         //             child2.layers[i].nodes[j].value = value;
-//         //         }
-//         //         currentNodeIndex++;
-//         //     }
-//         // }
-//         //=============================================================================
-//         //dva random indexa: index layera i index nodea u tom layeru i onda po tome dohvatit i mutirat
-//         //sad ovo radi kako treba
-//         int randomLayerIndex = randomInt(1, child1.layers.size() - 1);
-//         int amountOfWeights = this->neuralNetList[index].amountOfNodesInEachLayer[randomLayerIndex-1];
-//         int randomNodeIndex = randomInt(0, child1.layers[randomLayerIndex].nodes.size()-1);
-//
-//         child1.layers[randomLayerIndex].nodes[randomNodeIndex] = Node(amountOfWeights);
-//
-//         randomLayerIndex = randomInt(1, child2.layers.size() - 1);
-//         amountOfWeights = this->neuralNetList[index].amountOfNodesInEachLayer[randomLayerIndex-1];
-//         randomNodeIndex = randomInt(0, child2.layers[randomLayerIndex].nodes.size()-1);
-//
-//         child2.layers[randomLayerIndex].nodes[randomNodeIndex] = Node(amountOfWeights);
-//         //DRUGI NACIN
-//
-//     }else{
-//         //not mutating
-//         //cout <<"not mutating"<< endl;
-//     }
-//
-//     NewPop.neuralNetList[index] = child1;
-//     index++;
-//
-//     if(index != Constants::POPULATION_SIZE) {
-//         NewPop.neuralNetList[index] = child2;
-//     }
-//
-//     return index;
-// }

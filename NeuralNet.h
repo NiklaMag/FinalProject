@@ -7,12 +7,12 @@
 #include <vector>
 #include "Layer.h"
 using namespace std;
+
 class NeuralNet {
+
 public:
     vector<int> amountOfNodesInEachLayer;
     vector<Layer> layers;
-    // vector<float> inputs;
-    // vector<float> outputs;
     float fitness;
     NeuralNet();
     ~NeuralNet();
