@@ -18,7 +18,6 @@ float randomFloat(float min, float max) {
 }
 
 Node::Node(float input) {
-    //kako svakom nodeu odredit kolko spojeva ima???
     this->weights = {};
     this->value = input;
     this->function = static_cast<Function>(randomInt(0,Constants::AMOUNT_OF_FUNCTIONS));

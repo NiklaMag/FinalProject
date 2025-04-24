@@ -17,7 +17,7 @@ Layer::~Layer() {
 }
 
 
-vector<float> Layer::inputsIntoNodes(vector<float> inputs, int layerIndex) {//error
+vector<float> Layer::inputsIntoNodes(vector<float> inputs, int layerIndex) {
     vector<float> outputs = {};
     outputs.resize(this->nodes.size());
 

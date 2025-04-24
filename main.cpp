@@ -1,40 +1,78 @@
 #include <iostream>
 #include "Population.h"
 #include "Constants.h"
-//jos jedan nacin mutacije i jos jedan corssingover
 
 
 int main() {
 
     Population population1 = Population();
     unsigned int seed = static_cast<unsigned int>(time(NULL));
-    srand(seed);//ovaj seed baca error u 3 generaciji na neuralList index 3, get fitness inputs 0, inouts into layers ne radi TODO
-    //layers.size = 0 i amountOfNodesInEachLayer.size = 0
-    cout << "seed  " << seed <<endl;
-    //srand(time(NULL));  //1742771394  1742771419 1742771447
+    srand(seed);
+    //cout << "seed  " << seed <<endl;
+    //srand(time(NULL));  //1744484476
 
-    // vector<float> inputs = {1,2,3,4,5,6,7,8,9};
     vector<vector<float>> inputs = {
-        {1,1},
-        {2,2},
-        {3,3},
-        {4,4},
-        {5,5},
-        {6,6},
-        {7,7},
-        {8,8},
-        {9,9},
-        {0,0}
+        {25, -14, 3, -8, 19, 44},
+        {-22, 6, -17, 28, -4, 0},
+        {-39, 12, 9, -24, 18, -10},
+        {33, -5, -26, 20, -1, 16},
+        {45, -33, 8, -2, 22, -11},
+        {0, -27, 17, 13, -6, -18},
+        {-50, 11, 24, -3, 10, -15},
+        {7, -12, 5, -19, 41, -9},
+        {-30, 2, 36, -7, 32, -23}
+
+
+        // {5, -12, 33, -1, 19, -4, 40, -30},
+        // {0, 23, -7, 26, -17, 15, -45, 3},
+        // {14, -9, 8, -50, 27, -20, 2, -6},
+        // {-39, 24, 1, -10, 35, -22, -11, 41},
+        // {17, -18, 44, -33, 6, -25, 0, 7},
+        // {-29, 3, 12, -26, 30, -8, -1, 22},
+        // {16, -24, 13, -2, 11, -14, -5, 34},
+        // {-46, 9, -31, 18, -3, 36, -6, 0},
+        // {31, -19, -40, 20, -23, 45, -32, 4}
+
+        // {12, -35, 44, 8},
+        // {-7, 19, -22, 50},
+        // {0, -13, 32, -4},
+        // {-45, 28, -16, 9},
+        // {36, -1, 14, -30},
+        // {-17, 3, -48, 20},
+        // {27, -6, 5, -23},
+        // {39, -50, 7, 18},
+        // {-2, 11, -10, -33}
+
+        // {12, -7, 25, -33, 0, 18, 45},
+        // {-23, 1, -15, 39, 7, -8, 3},
+        // {44, -50, 36, 22, -17, 10, -9},
+        // {5, 13, -48, -2, 8, -26, 19},
+        // {-1, -12, 20, -45, 11, 27, 33},
+        // {7, 41, -3, -14, -50, 0, 26},
+        // {32, -22, 6, 15, -8, 2, -19},
+        // {-40, 9, 13, 17, -4, -28, 38},
+        // {3, -3, 30, -10, 24, -12, -33}
+
+        // {1,1,1},
+        // {1,2,2},
+        // {1,3,3},
+        // {1,4,4},
+        // {5,1,5},
+        // {1,6,6},
+        // {7,1,7},
+        // {8,1,8},
+        // {9,1,9},
+        // {0,1,0}
     };
 
-    vector<int> amountOfNodesInEachLayer = {2,2,3,1};
+    vector<int> amountOfNodesInEachLayer = {(int)inputs[0].size(),2,3,1};//broj nodova u prvom layeru mora bit isti kao broj stupaca u unputovima
 
-    int crossingOverIndex = 1;//2. radi isto
+    int crossingOverIndex = 1;
     int mutationIndex = 1;
     int randomCrossingOversMutations = 1;
 
-    // cout << "do you want random CrossingOvers and Mutations(0 = NO, 1 = YES)?"<<endl;
-    // cin >> randomCrossingOversMutations;
+    cout << "do you want random CrossingOvers and Mutations(0 = NO, 1 = YES)?"<<endl;
+    cin >> randomCrossingOversMutations;
 
     if(randomCrossingOversMutations == 0) {
 
@@ -47,9 +85,9 @@ int main() {
 
 
      for (int i = 0; i < Constants::NUMBER_OF_GENERATIONS; i++) {
-         int newPopulationFullness;//TU JOS VRTIT INPUTE
+         int newPopulationFullness;
 
-         cout << "generation: "<< i << "\n";
+         cout << "generation "<< i << ": ";
          if(i == 0){
              //punjenje populacije
              //filling and evaluating initial population ==============================
@@ -64,49 +102,33 @@ int main() {
 
 
          for (int j = 0; j < Constants::POPULATION_SIZE; j++) {
-             // cout << "neural list index: "<<j <<endl;
              //RACUNANJE FITNESA ZA SVAKI ELEMENT U POPULACIJI
-             // population1.neuralNetList[j].inputs = inputs;
-             // cout << "c"<<endl;
-             population1.neuralNetList[j].fitness = population1.neuralNetList[j].getFitness(inputs);//nsto oko fitness kalkulacije jebe %%%%%%
-
-             // cout << "c2"<<endl;
-             //fitness se razjebe na drugoj generaciji
+             population1.neuralNetList[j].fitness = population1.neuralNetList[j].getFitness(inputs);
          }
-         //cout << "d"<<endl;
+
          population1.neuralNetFitnessSort();
-         //cout << "e"<<endl;
          Population population2 = Population();
 
          //izrada i punjenje nove populacije
          newPopulationFullness = 0;
 
          while (newPopulationFullness < Constants::POPULATION_SIZE && population1.neuralNetList.size() == Constants::POPULATION_SIZE){
-             //cout << "f"<<endl;
+
              population1.chooseParents();
-             //cout << "g"<<endl;
-             //copy(population1.neuralNetList.begin(), population1.neuralNetList.end(), back_inserter(population2.neuralNetList));
-                //sketchy^^^^^
              newPopulationFullness = population1.crossingOverAndMutation(population2, newPopulationFullness, crossingOverIndex, mutationIndex, randomCrossingOversMutations);//tu je neki zez
              newPopulationFullness++;
-             //cout << "h"<<endl;
          }
 
+
          population1.neuralNetList.clear();
-         //cout << "i"<<endl;
          copy(population2.neuralNetList.begin(), population2.neuralNetList.end(), back_inserter(population1.neuralNetList));
-         //cout << "j"<<endl;
-         cout << "fitness: "<<population1.getBestNeuralNet().fitness << "\n";
-         //cout << "k"<<endl;
+         cout << "fitness = "<<population1.getBestNeuralNet().fitness << "\n";
          NeuralNet bestNN = population1.getBestNeuralNet();
 
      }
 
-    //NeuralNet bestNeuralNet = population1.getBestNeuralNet();
-
-
     //isprintat kraj i fitness
     //smislit neku funkciju i to regressat
-cout<<"program done";
+cout<<"program done\nfinal fitness: "<< population1.getBestNeuralNet().fitness;
 
 }

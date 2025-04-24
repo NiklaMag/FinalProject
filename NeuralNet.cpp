@@ -1,7 +1,7 @@
 //
 // Created by <3 on 11.03.2025..
 //
-//implementiraj get fitness
+
 
 #include "NeuralNet.h"
 #include <iostream>
@@ -71,7 +71,6 @@ float NeuralNet::getFitness(vector<vector<float>> inputs) {
     realOutputs.resize(inputs.size());
 
     for(int i = 0; i < inputs.size(); i++) {//ovo vrti korz sve input "skupove"
-        // cout << "get fitness(inputs): " << i << endl;
         expectedOutputs[i] = functionForRegression(inputs[i]);
         inputs[i] = inputsIntoLayers(inputs[i]);
         realOutputs[i] = inputs[i][0];

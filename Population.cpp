@@ -64,12 +64,10 @@ void Population::crossingOver1() {
 
     int amountOflayers = this->parent1.amountOfNodesInEachLayer.size();
     this->child1 = NeuralNet();
-    // this->child1.layers.reserve(amountOflayers);
     this->child1.layers.resize(amountOflayers);
     this->child1.amountOfNodesInEachLayer = this->parent1.amountOfNodesInEachLayer;
 
     this->child2 = NeuralNet();
-    // this->child2.layers.reserve(amountOflayers);
     this->child2.layers.resize(amountOflayers);
     this->child2.amountOfNodesInEachLayer = this->parent2.amountOfNodesInEachLayer;
 
@@ -80,9 +78,7 @@ void Population::crossingOver1() {
             this->child2.layers[i] = this->parent2.layers[i];
         }else{
             int amountOfNodesInLayer = parent1.amountOfNodesInEachLayer[i];
-            // this->child1.layers[i].nodes.reserve(amountOfNodesInLayer);
             this->child1.layers[i].nodes.resize(amountOfNodesInLayer);
-            // this->child2.layers[i].nodes.reserve(amountOfNodesInLayer);
             this->child2.layers[i].nodes.resize(amountOfNodesInLayer);
 
 
@@ -106,12 +102,10 @@ void Population::crossingOver2() {
     //co drugacije biraj node
     int amountOflayers = this->parent1.amountOfNodesInEachLayer.size();
     this->child1 = NeuralNet();
-    // this->child1.layers.reserve(amountOflayers);
     this->child1.layers.resize(amountOflayers);
     this->child1.amountOfNodesInEachLayer = this->parent1.amountOfNodesInEachLayer;
 
     this->child2 = NeuralNet();
-    // this->child2.layers.reserve(amountOflayers);
     this->child2.layers.resize(amountOflayers);
     this->child2.amountOfNodesInEachLayer = this->parent2.amountOfNodesInEachLayer;
 
@@ -122,9 +116,7 @@ void Population::crossingOver2() {
             this->child2.layers[i] = this->parent2.layers[i];
         }else{
             int amountOfNodesInLayer = parent1.amountOfNodesInEachLayer[i];
-            // this->child1.layers[i].nodes.reserve(amountOfNodesInLayer);
             this->child1.layers[i].nodes.resize(amountOfNodesInLayer);
-            // this->child2.layers[i].nodes.reserve(amountOfNodesInLayer);
             this->child2.layers[i].nodes.resize(amountOfNodesInLayer);
 
             //ovo je novi dio:
@@ -183,7 +175,7 @@ void Population::mutation2(int index) {
 
     if(r1 < Constants::MUTATION_PROBABILITY) {
         int amountOfNodesMutating = amountOfNodesInNet * Constants::PERCENTAGE_OF_NODES_MUTATING;
-        for(int i = 0; i < amountOfNodesMutating; i++) {//bilo bi dobro da se nekako prati koji nodeovi su vec mutirani koji ne i da se samo njih mutira(oni koji nisu), mozda neki flag mutated i ond stavimo na true kd se izmutira i ond preskocimo ako je taj node mutiran vec
+        for(int i = 0; i < amountOfNodesMutating; i++) {
 
             int randomLayerIndex1 = randomInt(1, this->child1.layers.size() - 1);
             int amountOfWeights1 = this->child1.amountOfNodesInEachLayer[randomLayerIndex1-1];
@@ -226,8 +218,11 @@ int Population::crossingOverAndMutation(Population &NewPop, int index, int cross
 
     int coIndex;
     int mutIndex;
+
     if(index == 0){
+
         NewPop.neuralNetList[0] = this->getBestNeuralNet();//dodamo najbolju jedinku u novu populaciju
+
         return index;
     }
     //CROSSING_OVER==============================
@@ -240,10 +235,10 @@ int Population::crossingOverAndMutation(Population &NewPop, int index, int cross
 
         coIndex = randomInt(1,2);
         mutIndex = randomInt(1,2);
-
-        // cout << "coIndex: " << coIndex <<endl;
-        // cout << "mutIndex: " << mutIndex <<endl;
     }
+
+    // cout << "crossing over index: "<< coIndex << endl;
+    // cout << "mutating index: "<< mutIndex << endl;
 
     if(coIndex == 1) {
         crossingOver1();
@@ -258,9 +253,6 @@ int Population::crossingOverAndMutation(Population &NewPop, int index, int cross
     }else if(mutIndex == 2) {
         mutation2(index);
     }
-
-
-
 
 
     NewPop.neuralNetList[index] = this->child1;
