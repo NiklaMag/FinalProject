@@ -10,8 +10,8 @@ using namespace std;
 int randomInt(int min, int max);
 float randomFloat(float min, float max);
 
-enum class Function{
-    MUL_2, DIV_2, SQUARE, SQRT, COS, SIN, TANH
+enum class Function{//dodaj + - * / ReLu
+    MUL_2, DIV_2, SQUARE, SQRT, COS, SIN, TANH, PLUS, MINUS, MUL, DIV, RELU
 };
 
 class Node {

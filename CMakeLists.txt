@@ -7,7 +7,7 @@ set(CMAKE_CXX_FLAGS "-O0 -g")
 
 add_executable(FinalProject main.cpp
         NeuralNet.h
-        neuralNet.cpp
+        NeuralNet.cpp
         Layer.h
         Layer.cpp
         Node.h
@@ -15,4 +15,6 @@ add_executable(FinalProject main.cpp
         Constants.h
         Population.h
         Population.cpp
+        FileReader.h
+        FileReader.cpp
 )

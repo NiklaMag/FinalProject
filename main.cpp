@@ -1,134 +1,142 @@
 #include <iostream>
 #include "Population.h"
 #include "Constants.h"
-
-
+#include "FileReader.h"
+//PAZI
+//6 FUNCTIONS FOR REGRESSION:
+//  index 0 : arbitrary sized vector, domain [-50, 50]
+//  index 1 : x, domain [0, 20]
+//  index 2 : x y, domain [-10,10]
+//  index 3 : x y, domain [-10,10]
+//  index 4 : x y, domain [-10,10]
+//  index 5 : x y, domain [-10,10]
+/*
+ * ocekivanje vrijednosti u fileu tako da se nemora birat funkcija,u tom slucaju nema funkcije za regresiju --> ovo je rijeseno relativno
+ *
+ * plus minus div(zasiceni da apsolutna vrijenost nije manja od 10^-6), mul --> ovo je rijeseno relativno
+ *
+ * isprobat najbolju mrezu na novim podacija bez testiranja --> ovo je rijeseno relativno
+ *
+ * automatizirat tesiranje --> ne jos
+*/
 int main() {
 
     Population population1 = Population();
     unsigned int seed = static_cast<unsigned int>(time(NULL));
     srand(seed);
-    //cout << "seed  " << seed <<endl;
-    //srand(time(NULL));  //1744484476
+    NeuralNet bestNet;
+    // cout << "seed  " << seed <<endl;
 
-    vector<vector<float>> inputs = {
-        {25, -14, 3, -8, 19, 44},
-        {-22, 6, -17, 28, -4, 0},
-        {-39, 12, 9, -24, 18, -10},
-        {33, -5, -26, 20, -1, 16},
-        {45, -33, 8, -2, 22, -11},
-        {0, -27, 17, 13, -6, -18},
-        {-50, 11, 24, -3, 10, -15},
-        {7, -12, 5, -19, 41, -9},
-        {-30, 2, 36, -7, 32, -23}
-
-
-        // {5, -12, 33, -1, 19, -4, 40, -30},
-        // {0, 23, -7, 26, -17, 15, -45, 3},
-        // {14, -9, 8, -50, 27, -20, 2, -6},
-        // {-39, 24, 1, -10, 35, -22, -11, 41},
-        // {17, -18, 44, -33, 6, -25, 0, 7},
-        // {-29, 3, 12, -26, 30, -8, -1, 22},
-        // {16, -24, 13, -2, 11, -14, -5, 34},
-        // {-46, 9, -31, 18, -3, 36, -6, 0},
-        // {31, -19, -40, 20, -23, 45, -32, 4}
-
-        // {12, -35, 44, 8},
-        // {-7, 19, -22, 50},
-        // {0, -13, 32, -4},
-        // {-45, 28, -16, 9},
-        // {36, -1, 14, -30},
-        // {-17, 3, -48, 20},
-        // {27, -6, 5, -23},
-        // {39, -50, 7, 18},
-        // {-2, 11, -10, -33}
-
-        // {12, -7, 25, -33, 0, 18, 45},
-        // {-23, 1, -15, 39, 7, -8, 3},
-        // {44, -50, 36, 22, -17, 10, -9},
-        // {5, 13, -48, -2, 8, -26, 19},
-        // {-1, -12, 20, -45, 11, 27, 33},
-        // {7, 41, -3, -14, -50, 0, 26},
-        // {32, -22, 6, 15, -8, 2, -19},
-        // {-40, 9, 13, 17, -4, -28, 38},
-        // {3, -3, 30, -10, 24, -12, -33}
-
-        // {1,1,1},
-        // {1,2,2},
-        // {1,3,3},
-        // {1,4,4},
-        // {5,1,5},
-        // {1,6,6},
-        // {7,1,7},
-        // {8,1,8},
-        // {9,1,9},
-        // {0,1,0}
+    vector<string> pathToFiles = {
+      "/Users/nikson/Documents/GitHub/FinalProject/inputs/input_9x4_V_[-inf,inf]",
+        "/Users/nikson/Documents/GitHub/FinalProject/inputs/input_9x6_V_[-inf,inf]",
+        "/Users/nikson/Documents/GitHub/FinalProject/inputs/input_9x7_V_[-inf,inf]",
+        "/Users/nikson/Documents/GitHub/FinalProject/inputs/input_9x8_V_[-inf,inf]",
+        "/Users/nikson/Documents/GitHub/FinalProject/inputs/input_10x3_V_[-inf,inf]"
     };
+    string pathToSetupFile = "/Users/nikson/Documents/GitHub/FinalProject/setup/runSetup";
 
-    vector<int> amountOfNodesInEachLayer = {(int)inputs[0].size(),2,3,1};//broj nodova u prvom layeru mora bit isti kao broj stupaca u unputovima
+    for(int x = 0; x < pathToFiles.size(); x++) {
+        cout << "NEW FILE"<<endl;
+        string pathToFile = pathToFiles[x];
 
-    int crossingOverIndex = 1;
-    int mutationIndex = 1;
-    int randomCrossingOversMutations = 1;
+        FileReader fileReader = FileReader();
 
-    cout << "do you want random CrossingOvers and Mutations(0 = NO, 1 = YES)?"<<endl;
-    cin >> randomCrossingOversMutations;
+        fileReader.readSetupFile(pathToSetupFile);
 
-    if(randomCrossingOversMutations == 0) {
+        fileReader.readInputFile(pathToFile, fileReader.functionForRegressionCheck);
 
-        cout << "choose crossingOver(1,2): " <<endl;
-        cin >> crossingOverIndex;
+        vector<vector<float>> inputs = fileReader.inputs;
+        vector<float> expectedOutputs = fileReader.expectedOutputs;
 
-        cout << "choose mutation(1,2):" << endl;
-        cin >> mutationIndex;
+        vector<int> amountOfNodesInEachLayer = {(int)inputs[0].size(),2,3,1};//broj nodova u prvom layeru mora bit isti kao broj stupaca u unputovima
+
+        int crossingOverIndex = fileReader.crossingOverIndex;
+        int mutationIndex = fileReader.mutatingIndex;
+        int randomCrossingOversMutations = fileReader.randomCrossingOversMutations;
+        int functionIndex = fileReader.functionIndex; //0-6 PAZI STA TREBA KOME
+        //DEBUG FILE READER
+        // cout << "number of rows: " << fileReader.inputs.size() <<endl;
+        // cout << "number of collumns: " << fileReader.inputs[0].size() <<endl;
+        //
+        // cout << "inputs: "<<endl;
+        //
+        // for(int i = 0; i < fileReader.inputs.size(); i++) {
+        //     for(int j = 0; j < fileReader.inputs[0].size(); j++) {
+        //         cout << inputs[i][j] << " ";
+        //     }
+        //     cout << endl;
+        // }
+        //
+        // cout << "expected Outputs: " << endl;
+        //
+        // for(int i = 0; i < fileReader.expectedOutputs.size(); i ++) {
+        //     cout << "line " << i << ": " << expectedOutputs[i]<< endl;
+        // }
+        //
+        //
+        // cout << endl << "randomCrossingOversMutations: "<< fileReader.randomCrossingOversMutations <<endl;
+        // cout << "crossingOverIndex: " << fileReader.randomCrossingOversMutations <<endl;
+        // cout << "mutationIndex: " <<fileReader.mutatingIndex <<endl;
+        // cout << "functionForRegressionCheck: " <<  fileReader.functionForRegressionCheck << endl << endl;
+
+        for (int i = 0; i < Constants::NUMBER_OF_GENERATIONS; i++) {
+            int newPopulationFullness;
+
+            // cout << "generation "<< i << ": "<<endl;
+            if(i == 0){
+                 //punjenje populacije
+                 //filling and evaluating initial population ==============================
+                for (int j = 0; j < Constants::POPULATION_SIZE; j++) {
+                    // cout << "filling population: "<<endl;
+                    NeuralNet neuralNet(amountOfNodesInEachLayer);//not the best
+                    // cout << "c"<<endl;
+                    //neuralNet.inputs = inputs;
+                    neuralNet.amountOfNodesInEachLayer = amountOfNodesInEachLayer;
+                    // cout << "d"<<endl;
+                    population1.neuralNetList[j] = neuralNet;
+                    // cout << j <<endl;
+                }
+            }
+
+
+            for (int j = 0; j < Constants::POPULATION_SIZE; j++) {
+                //RACUNANJE FITNESA ZA SVAKI ELEMENT U POPULACIJI
+                // cout << "getting fitness for entity: ";
+                population1.neuralNetList[j].fitness = population1.neuralNetList[j].getFitness(inputs, functionIndex, fileReader);
+                // cout << j << endl;
+            }
+            // cout << "done getting initial fitness"<<endl;
+
+            population1.neuralNetFitnessSort();
+            // cout << "sorting done" <<endl;
+            Population population2 = Population();
+
+            //izrada i punjenje nove populacije
+            newPopulationFullness = 0;
+
+            while (newPopulationFullness < Constants::POPULATION_SIZE && population1.neuralNetList.size() == Constants::POPULATION_SIZE){
+                population1.chooseParents();
+                // cout << "parents chosen" <<endl;
+                newPopulationFullness = population1.crossingOverAndMutation(population2, newPopulationFullness, crossingOverIndex, mutationIndex, randomCrossingOversMutations);//tu je neki zez
+                // cout << "CO and mutation done"<<endl;
+                newPopulationFullness++;
+            }
+
+
+            population1.neuralNetList.clear();
+            copy(population2.neuralNetList.begin(), population2.neuralNetList.end(), back_inserter(population1.neuralNetList));
+            // cout << "fitness = "<<population1.getBestNeuralNet().fitness << "\n";
+            NeuralNet bestNN = population1.getBestNeuralNet();
+
+        }
+
+        string fileName = fileReader.split(pathToFile, '/')[fileReader.split(pathToFile, '/').size()-1];
+        bestNet = population1.getBestNeuralNet();
+        cout << "file: " << fileName <<endl;
+        cout << "final fitness: " << bestNet.fitness <<endl<<endl;
     }
 
-
-     for (int i = 0; i < Constants::NUMBER_OF_GENERATIONS; i++) {
-         int newPopulationFullness;
-
-         cout << "generation "<< i << ": ";
-         if(i == 0){
-             //punjenje populacije
-             //filling and evaluating initial population ==============================
-             for (int j = 0; j < Constants::POPULATION_SIZE; j++) {
-                 //cout << "b"<<endl;
-                 NeuralNet neuralNet(amountOfNodesInEachLayer);//not the best
-                 //neuralNet.inputs = inputs;
-                 neuralNet.amountOfNodesInEachLayer = amountOfNodesInEachLayer;
-                 population1.neuralNetList[j] = neuralNet;
-             }
-         }
-
-
-         for (int j = 0; j < Constants::POPULATION_SIZE; j++) {
-             //RACUNANJE FITNESA ZA SVAKI ELEMENT U POPULACIJI
-             population1.neuralNetList[j].fitness = population1.neuralNetList[j].getFitness(inputs);
-         }
-
-         population1.neuralNetFitnessSort();
-         Population population2 = Population();
-
-         //izrada i punjenje nove populacije
-         newPopulationFullness = 0;
-
-         while (newPopulationFullness < Constants::POPULATION_SIZE && population1.neuralNetList.size() == Constants::POPULATION_SIZE){
-
-             population1.chooseParents();
-             newPopulationFullness = population1.crossingOverAndMutation(population2, newPopulationFullness, crossingOverIndex, mutationIndex, randomCrossingOversMutations);//tu je neki zez
-             newPopulationFullness++;
-         }
-
-
-         population1.neuralNetList.clear();
-         copy(population2.neuralNetList.begin(), population2.neuralNetList.end(), back_inserter(population1.neuralNetList));
-         cout << "fitness = "<<population1.getBestNeuralNet().fitness << "\n";
-         NeuralNet bestNN = population1.getBestNeuralNet();
-
-     }
-
-    //isprintat kraj i fitness
-    //smislit neku funkciju i to regressat
-cout<<"program done\nfinal fitness: "<< population1.getBestNeuralNet().fitness;
+cout<<"program done";
 
 }

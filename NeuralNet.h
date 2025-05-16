@@ -5,6 +5,8 @@
 #ifndef NEURALNET_H
 #define NEURALNET_H
 #include <vector>
+
+#include "FileReader.h"
 #include "Layer.h"
 using namespace std;
 
@@ -20,8 +22,8 @@ public:
 
 
     vector<float> inputsIntoLayers(vector<float> inputs);
-    float getFitness(vector<vector<float>> inputs);
-    float functionForRegression(vector<float> inputs);
+    float getFitness(vector<vector<float>> inputs, int functionIndex, FileReader fileReader);
+    float functionForRegression(vector<float> inputs, int functionIndex);
     void runInputs(vector<float> inputs);
 };
 

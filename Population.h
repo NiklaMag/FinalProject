@@ -4,11 +4,14 @@
 
 #ifndef POPULATION_H
 #define POPULATION_H
+#include <random>
 #include <vector>
 #include "NeuralNet.h"
 using namespace std;
 
 class Population {
+
+
 
 public:
     vector<NeuralNet> neuralNetList;

@@ -32,10 +32,15 @@ NeuralNet &Population::getBestNeuralNet() {
     return neuralNetList[0];
 }
 
-float gaussFunction(float x) {
-    float part1 = -pow(x-Constants::NORMAL_DISTRIBUTION_MEAN,2)/(2* pow(Constants::NORMAL_DISTRIBUTION_STDDEV,2));
-    float part2 = exp(part1)/(Constants::NORMAL_DISTRIBUTION_STDDEV*sqrt(2*M_PI));
-return part2;
+float gaussFunction(float x) {//TODO na mailu je kako se to radi, msm da je sad dobro, provjeri s prof
+    normal_distribution<double> N(0, 1);
+    std::random_device rd;
+    std::mt19937 rng(rd());
+    mt19937 engine_= rng;
+    double offset = N(engine_);
+    double newValue = x + offset;
+
+return newValue;
 }
 
 
@@ -240,17 +245,17 @@ int Population::crossingOverAndMutation(Population &NewPop, int index, int cross
     // cout << "crossing over index: "<< coIndex << endl;
     // cout << "mutating index: "<< mutIndex << endl;
 
-    if(coIndex == 1) {
+    if(coIndex == 0) {
         crossingOver1();
 
-    }else if(coIndex == 2) {
+    }else if(coIndex == 1) {
         crossingOver2();
     }
     //MUTATION=====================================
-    if(mutIndex == 1) {
+    if(mutIndex == 0) {
         mutation1(index);
 
-    }else if(mutIndex == 2) {
+    }else if(mutIndex == 1) {
         mutation2(index);
     }
 
