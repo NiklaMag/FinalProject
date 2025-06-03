@@ -44,7 +44,7 @@ int main() {
 
         fileReader.readSetupFile(pathToSetupFile);
 
-        fileReader.readInputFile(pathToFile, fileReader.functionForRegressionCheck);
+        fileReader.readInputFile(pathToFile, fileReader.blackBox);
 
         vector<vector<float>> inputs = fileReader.inputs;
         vector<float> expectedOutputs = fileReader.expectedOutputs;
@@ -92,7 +92,7 @@ int main() {
                     NeuralNet neuralNet(amountOfNodesInEachLayer);//not the best
                     // cout << "c"<<endl;
                     //neuralNet.inputs = inputs;
-                    neuralNet.amountOfNodesInEachLayer = amountOfNodesInEachLayer;
+                    //neuralNet.amountOfNodesInEachLayer = amountOfNodesInEachLayer;
                     // cout << "d"<<endl;
                     population1.neuralNetList[j] = neuralNet;
                     // cout << j <<endl;
@@ -109,6 +109,7 @@ int main() {
             // cout << "done getting initial fitness"<<endl;
 
             population1.neuralNetFitnessSort();
+            NeuralNet bestNN = population1.getBestNeuralNet();
             // cout << "sorting done" <<endl;
             Population population2 = Population();
 
@@ -127,7 +128,7 @@ int main() {
             population1.neuralNetList.clear();
             copy(population2.neuralNetList.begin(), population2.neuralNetList.end(), back_inserter(population1.neuralNetList));
             // cout << "fitness = "<<population1.getBestNeuralNet().fitness << "\n";
-            NeuralNet bestNN = population1.getBestNeuralNet();
+
 
         }
 

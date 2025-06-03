@@ -13,8 +13,8 @@ using namespace std;
 NeuralNet::NeuralNet(vector<int> amountOfNodesInEachLayer) {
     //creating a neural net, no inputs
     this->amountOfNodesInEachLayer = amountOfNodesInEachLayer;
-    int amountOflayers = this->amountOfNodesInEachLayer.size();
-    for(int i = 0; i < amountOflayers; i++) {
+    int amountOfLayers = this->amountOfNodesInEachLayer.size();
+    for(int i = 0; i < amountOfLayers; i++) {
         int amountOfNodesInLayer = amountOfNodesInEachLayer[i];
         Layer layer = Layer();
         this->layers.push_back(layer);
@@ -115,10 +115,10 @@ float NeuralNet::getFitness(vector<vector<float>> inputs, int functionIndex, Fil
 
 
     for(int i = 0; i < inputs.size(); i++) {//ovo vrti korz sve input "skupove"
-        if(fileReader.functionForRegressionCheck == 0) {
+        if(fileReader.blackBox == 0) {
             expectedOutputs[i] = functionForRegression(inputs[i], functionIndex);
 
-        }else if(fileReader.functionForRegressionCheck == 1 && expectedOutputs.size() == fileReader.expectedOutputs.size()) {
+        }else if(fileReader.blackBox == 1 && expectedOutputs.size() == fileReader.expectedOutputs.size()) {
             expectedOutputs[i] = fileReader.expectedOutputs[i];
         }
 

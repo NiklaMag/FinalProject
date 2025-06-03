@@ -225,9 +225,7 @@ int Population::crossingOverAndMutation(Population &NewPop, int index, int cross
     int mutIndex;
 
     if(index == 0){
-
         NewPop.neuralNetList[0] = this->getBestNeuralNet();//dodamo najbolju jedinku u novu populaciju
-
         return index;
     }
     //CROSSING_OVER==============================

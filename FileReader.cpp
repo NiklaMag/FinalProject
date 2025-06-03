@@ -24,7 +24,7 @@ using namespace std;
 */
 
 
-void FileReader::readInputFile(string pathToInputFile, int regression) {//0 yes   1 no
+void FileReader::readInputFile(string pathToInputFile, int blackbox) {//0 yes   1 no
 
     //prvih n - 1 elemenata u redu su inputovi,
     //zadnji element je ocekivani output za taj input skup
@@ -55,18 +55,18 @@ void FileReader::readInputFile(string pathToInputFile, int regression) {//0 yes 
 
             }else if(lineCounter > -1 && lineCounter < numberOfRows){
 
-                int lastElementIndex;
+                int lastInputElementIndex;
 
-                if(regression == 0) {
-                    lastElementIndex = numberOfCollumns;
-                }else if(regression == 1) {
-                    lastElementIndex = numberOfCollumns - 1;
-                    this->expectedOutputs[lineCounter] = stof(segments[lastElementIndex]);
+                if(blackbox == 0) {
+                    lastInputElementIndex = numberOfCollumns;
+                }else if(blackbox == 1) {
+                    lastInputElementIndex = numberOfCollumns - 1;
+                    this->expectedOutputs[lineCounter] = stof(segments[lastInputElementIndex]);
                 }
 
-                this->inputs[lineCounter].resize(lastElementIndex);
+                this->inputs[lineCounter].resize(lastInputElementIndex);
 
-                for(int j = 0; j < lastElementIndex; j++) {
+                for(int j = 0; j < lastInputElementIndex; j++) {
                     //ide kroz elemnte u redu
                     this->inputs[lineCounter][j] = stof(segments[j]);//inputovi
                 }
@@ -100,7 +100,7 @@ void FileReader::readSetupFile(string pathToSetupfile) {
                 this->randomCrossingOversMutations = stoi(segments[0]);
                 this->crossingOverIndex = stoi(segments[1]);
                 this->mutatingIndex = stoi(segments[2]);
-                this->functionForRegressionCheck = stoi(segments[3]);
+                this->blackBox = stoi(segments[3]);
                 this->functionIndex = stoi(segments[4]);
             }else {
                 cout <<"reading setup went wrong\n";
