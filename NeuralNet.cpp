@@ -58,45 +58,42 @@ float NeuralNet::functionForRegression(vector<float> inputs, int functionIndex) 
     float x;
     float y;
 
+
     switch(functionIndex) {
-        case 0://input je vektor neogredene velicine, moze bit kolko god xi, testirano za domenu [-50, 50], vjv radi i za ostalo
-            for(int i = 0; i < inputs.size(); i++) {
-                sum = sum + (sin(inputs[i]) + cos(2*inputs[i]) + log(1 + pow(inputs[i], 2)));
-            }
-        break;
-
-        case 1://samo jedan x u inputu, nije vektor, domena [0, 20]
+        case 0://log (x + 1) + log (x2 + 1) [0, 20]
             x = inputs[0];
-            sum = log10(x + 1) + log10(pow(x,2) + 1);
+            y = inputs[1];
+            sum = log(x + 1) + log(pow(x, 2) + 1);
         break;
 
-        case 2://inputi x i y, domena [-10,10]
+        case 1://sin(x) + sin(y 2)       [−10, 10]
             x = inputs[0];
             y = inputs[1];
             sum = sin(x) + sin(pow(y,2));
         break;
 
-        case 3://inputi x i y, domena [-10,10]
+        case 2://2·sin(x)·cos(y )       [−10, 10]
             x = inputs[0];
             y = inputs[1];
-            sum = 2*sin(x)*cos(y);
+            sum = 2 * sin(x) * cos(y);
         break;
 
-        case 4://inputi x i y, domena [-10,10]
+        case 3://x·y + sin((x + 1)·(y−1))     [−10, 10]
             x = inputs[0];
             y = inputs[1];
-            sum = x*y+sin((x+1)*(y-1));
+            sum = x * y + sin((x + 1)*(y-1));
         break;
 
-        case 5://inputi x i y, domena [-10,10]
+        case 4:// Keijzer 15 f(x, y) = 8 / (2 + x^2 + y^2)  [−10, 10]
             x = inputs[0];
             y = inputs[1];
-            sum = 8/(2+pow(x,2)+pow(y,2));
+            sum = 8 / (2 + pow(x, 2) + pow(y, 2));
+        break;
 
-        case 6://inputi x i y, domena [-10,10]
+        case 5:// Keijzer 16 f(x, y) = x^3 / 5 + y^3 / 2 - y - x  [−10, 10]
             x = inputs[0];
             y = inputs[1];
-            sum = (pow(x,3)/5)+(pow(y,3)/2)-x-y;
+            sum = pow(x, 3)/5 + pow(y, 3)/2 - y - x;
         break;
     }
 

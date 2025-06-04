@@ -236,8 +236,10 @@ int Population::crossingOverAndMutation(Population &NewPop, int index, int cross
         mutIndex = mutationIndex;
     }else if(randomCrossingOversMutations == 1) {
 
-        coIndex = randomInt(1,2);
-        mutIndex = randomInt(1,2);
+        coIndex = randomInt(0,1);
+        // cout <<"coIndex:" << coIndex <<endl;
+        mutIndex = randomInt(0,1);
+        // cout <<"mutIndex:" << mutIndex <<endl;
     }
 
     // cout << "crossing over index: "<< coIndex << endl;
