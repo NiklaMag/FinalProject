@@ -33,7 +33,7 @@ NeuralNet &Population::getBestNeuralNet() {
 }
 
 float gaussFunction(float x) {//TODO na mailu je kako se to radi, msm da je sad dobro, provjeri s prof
-    normal_distribution<double> N(0, 1);
+    normal_distribution<double> N(0, 0.1);//???????????
     std::random_device rd;
     std::mt19937 rng(rd());
     mt19937 engine_= rng;
@@ -180,10 +180,11 @@ void Population::mutation2(int index) {
 
     if(r1 < Constants::MUTATION_PROBABILITY) {
         int amountOfNodesMutating = amountOfNodesInNet * Constants::PERCENTAGE_OF_NODES_MUTATING;
+
         for(int i = 0; i < amountOfNodesMutating; i++) {
 
             int randomLayerIndex1 = randomInt(1, this->child1.layers.size() - 1);
-            int amountOfWeights1 = this->child1.amountOfNodesInEachLayer[randomLayerIndex1-1];
+            int amountOfWeights1 = this->child1.amountOfNodesInEachLayer[randomLayerIndex1-1];//int amountOfWeights = this->neuralNetList[index].amountOfNodesInEachLayer[randomLayerIndex-1];
             int randomNodeIndex1 = randomInt(0, this->child1.layers[randomLayerIndex1].nodes.size()-1);
 
             int randomLayerIndex2 = randomInt(1, this->child2.layers.size() - 1);

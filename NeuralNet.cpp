@@ -14,6 +14,7 @@ NeuralNet::NeuralNet(vector<int> amountOfNodesInEachLayer) {
     //creating a neural net, no inputs
     this->amountOfNodesInEachLayer = amountOfNodesInEachLayer;
     int amountOfLayers = this->amountOfNodesInEachLayer.size();
+
     for(int i = 0; i < amountOfLayers; i++) {
         int amountOfNodesInLayer = amountOfNodesInEachLayer[i];
         Layer layer = Layer();
@@ -62,7 +63,6 @@ float NeuralNet::functionForRegression(vector<float> inputs, int functionIndex) 
     switch(functionIndex) {
         case 0://log (x + 1) + log (x2 + 1) [0, 20]
             x = inputs[0];
-            y = inputs[1];
             sum = log(x + 1) + log(pow(x, 2) + 1);
         break;
 

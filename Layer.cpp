@@ -106,11 +106,10 @@ vector<float> Layer::inputsIntoNodes(vector<float> inputs, int layerIndex) {
                     // cout <<"MINUS" <<endl;
                 break;
                 case Function::DIV:
-                    if(part2 < 0.0000001) {
+                    if(fabs(part2) < 0.0000001) {
                         sum = part1;
-                        // cout << "really small" <<endl;
-                    }else {
-                        sum = part1/part2;
+                    } else {
+                        sum = part1 / part2;
                     }
                     // cout <<"MINUS" <<endl;
                 break;

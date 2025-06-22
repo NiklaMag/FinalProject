@@ -11,32 +11,27 @@
 //  index 4 : x y, domain [-10,10]
 //  index 5 : x y, domain [-10,10]
 /*
- * ocekivanje vrijednosti u fileu tako da se nemora birat funkcija,u tom slucaju nema funkcije za regresiju --> ovo je rijeseno relativno
- *
- * plus minus div(zasiceni da apsolutna vrijenost nije manja od 10^-6), mul --> ovo je rijeseno relativno
- *
- * isprobat najbolju mrezu na novim podacija bez testiranja --> ovo je rijeseno relativno
- *
- * automatizirat tesiranje --> ne jos
+
 */
 int main() {
-    for(int z = 0; z < 10; z++){
+    for(int z = 0; z < Constants::NUMBER_OF_RUNS; z++){
 
         cout << "XXXXXX+++++++RUN: "<<z<<"+++++++XXXXXXX"<<endl;;
         Population population1 = Population();
         unsigned int seed = static_cast<unsigned int>(time(NULL));
-        srand(seed);//1748976376
+        // unsigned int seed = 1749525174; // 1749525174
+        srand(seed);// 1749525174
         NeuralNet bestNet;
-        // cout << "seed  " << seed <<endl;
+        cout << "seed  " << seed <<endl;
 
-        vector<string> pathToFiles = { "/Users/nikson/Documents/GitHub/FinalProject/inputs/data_file_1.txt"
+        vector<string> pathToFiles = { "/Users/nikson/Documents/GitHub/FinalProject/inputs/data_file_2.txt"
 
         };
         vector<string> pathToSetupFile = {"/Users/nikson/Documents/GitHub/FinalProject/setup/runSetup_CO0_MUT0",
             "/Users/nikson/Documents/GitHub/FinalProject/setup/runSetup_CO0_MUT1",
-            "/Users/nikson/Documents/GitHub/FinalProject/setup/runSetup_CO1_MUT0",
-            "/Users/nikson/Documents/GitHub/FinalProject/setup/runSetup_CO1_MUT1",
-            "/Users/nikson/Documents/GitHub/FinalProject/setup/runSetup_COR_MUTR"
+             "/Users/nikson/Documents/GitHub/FinalProject/setup/runSetup_CO1_MUT0",
+             "/Users/nikson/Documents/GitHub/FinalProject/setup/runSetup_CO1_MUT1",
+             "/Users/nikson/Documents/GitHub/FinalProject/setup/runSetup_COR_MUTR"
 
         };
 
@@ -70,30 +65,6 @@ int main() {
             int mutationIndex = fileReader.mutatingIndex;
             int randomCrossingOversMutations = fileReader.randomCrossingOversMutations;
             int functionIndex = fileReader.functionIndex; //0-6 PAZI STA TREBA KOME
-            //DEBUG FILE READER
-            // cout << "number of rows: " << fileReader.inputs.size() <<endl;
-            // cout << "number of collumns: " << fileReader.inputs[0].size() <<endl;
-            //
-            // cout << "inputs: "<<endl;
-            //
-            // for(int i = 0; i < fileReader.inputs.size(); i++) {
-            //     for(int j = 0; j < fileReader.inputs[0].size(); j++) {
-            //         cout << inputs[i][j] << " ";
-            //     }
-            //     cout << endl;
-            // }
-            //
-            // cout << "expected Outputs: " << endl;
-            //
-            // for(int i = 0; i < fileReader.expectedOutputs.size(); i ++) {
-            //     cout << "line " << i << ": " << expectedOutputs[i]<< endl;
-            // }
-            //
-            //
-            // cout << endl << "randomCrossingOversMutations: "<< fileReader.randomCrossingOversMutations <<endl;
-            // cout << "crossingOverIndex: " << fileReader.randomCrossingOversMutations <<endl;
-            // cout << "mutationIndex: " <<fileReader.mutatingIndex <<endl;
-            // cout << "functionForRegressionCheck: " <<  fileReader.functionForRegressionCheck << endl << endl;
 
             for (int i = 0; i < Constants::NUMBER_OF_GENERATIONS; i++) {
                 int newPopulationFullness;
@@ -104,14 +75,14 @@ int main() {
                     for (int j = 0; j < Constants::POPULATION_SIZE; j++) {
                         // cout << "filling population: "<<endl;
                         NeuralNet neuralNet(amountOfNodesInEachLayer);//not the best
-                        // cout << "c"<<endl;
-                        //neuralNet.inputs = inputs;
-                        //neuralNet.amountOfNodesInEachLayer = amountOfNodesInEachLayer;
-                        // cout << "d"<<endl;
+
                         population1.neuralNetList[j] = neuralNet;
                         // cout << j <<endl;
                     }
                 }
+
+
+
 
 
                 for (int j = 0; j < Constants::POPULATION_SIZE; j++) {
@@ -133,7 +104,7 @@ int main() {
                 while (newPopulationFullness < Constants::POPULATION_SIZE && population1.neuralNetList.size() == Constants::POPULATION_SIZE){
                     population1.chooseParents();
                     // cout << "parents chosen" <<endl;
-                    newPopulationFullness = population1.crossingOverAndMutation(population2, newPopulationFullness, crossingOverIndex, mutationIndex, randomCrossingOversMutations);//ERROR
+                    newPopulationFullness = population1.crossingOverAndMutation(population2, newPopulationFullness, crossingOverIndex, mutationIndex, randomCrossingOversMutations);
                     // cout << "CO and mutation done"<<endl;
                     newPopulationFullness++;
                 }
@@ -146,7 +117,9 @@ int main() {
                     cout << "generation "<< i << ": ";
                     cout << "fitness = "<<population1.getBestNeuralNet().fitness << "\n";
                 }
-
+                // cout << "generation "<< i << ": ";
+                // // cout << "fitness = "<<population1.getBestNeuralNet().fitness << "\n";
+                // cout << "fitness = "<< bestNN.fitness << "\n";
             }
 
             // string fileName = fileReader.split(pathToFile, '/')[fileReader.split(pathToFile, '/').size()-1];

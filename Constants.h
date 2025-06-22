@@ -14,6 +14,7 @@ namespace Constants {
     static const float PERCENTAGE_OF_NODES_MUTATING = 0.7;
     static const float CHANCE_OF_NODE_CHANGING_FUNCTIONS = 0.8;
     static const int AMOUNT_OF_FUNCTIONS = 11;//ima ih 12 al indexi idu od 0-11
+    static const int NUMBER_OF_RUNS = 10;
 }
 
 

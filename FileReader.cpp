@@ -30,8 +30,8 @@ void FileReader::readInputFile(string pathToInputFile, int blackbox) {//0 yes   
     //zadnji element je ocekivani output za taj input skup
     ifstream myInputFile;
     myInputFile.open(pathToInputFile);
-
     string line;
+
     int lineCounter = -1;
     vector<string> segments;
     int numberOfRows;
